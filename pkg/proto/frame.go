@@ -52,6 +52,7 @@ func ParseFramingHdr(b byte) (FramingHdr, error) {
 
 	f.ID = byte((b & 0b0110_0000) >> 5)
 	f.Endpoint = Endpoint((b & 0b0001_1000) >> 3)
+	f.ResponseNotOK = ((b & 0b0000_0100) != 0)
 	f.CmdLen = CmdLen(b & 0b0000_0011)
 
 	return f, nil
@@ -59,9 +60,10 @@ func ParseFramingHdr(b byte) (FramingHdr, error) {
 
 // Frame represents a single frame in the framing protocol.
 type Frame struct {
-	cmd  Cmd
-	id   int
-	data []byte
+	cmd   Cmd
+	id    int
+	notOK bool
+	data  []byte
 }
 
 // NewFrame creates a new frame with the given command, ID and data.
@@ -76,7 +78,25 @@ func NewFrame(cmd Cmd, id int, data []byte) (Frame, error) {
 		return Frame{}, errInvalidCmdLength
 	}
 
-	return Frame{cmd, id, data}, nil
+	return Frame{cmd, id, false, data}, nil
+}
+
+// FirmwareErrorFrame creates a new error frame.
+func FirmwareErrorFrame(id int) (Frame, error) {
+	if id > 3 {
+		return Frame{}, errInvalidFrameID
+	}
+
+	return Frame{RspFirmwareError, id, true, []byte{0}}, nil
+}
+
+// AppErrorFrame creates a new error frame.
+func AppErrorFrame(id int) (Frame, error) {
+	if id > 3 {
+		return Frame{}, errInvalidFrameID
+	}
+
+	return Frame{NewAppCmd(0, "rspAppError", CmdLen1), id, true, []byte{0}}, nil
 }
 
 // Len returns the length of the frame in bytes.
@@ -147,7 +167,11 @@ func (f *Frame) readFrameHdr(buf []byte) error {
 		return errBufferTooSmall
 	}
 
-	buf[0] = (byte(f.id) << 5) | (byte(f.cmd.Endpoint()) << 3) | byte(f.cmd.CmdLen())
+	var notOK byte
+	if f.notOK {
+		notOK = 1
+	}
+	buf[0] = (byte(f.id) << 5) | (byte(f.cmd.Endpoint()) << 3) | (byte(notOK) << 2) | byte(f.cmd.CmdLen())
 
 	// Set command code
 	buf[1] = f.cmd.Code()
