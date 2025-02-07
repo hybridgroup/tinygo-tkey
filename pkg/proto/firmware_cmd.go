@@ -1,6 +1,7 @@
 package proto
 
 var (
+	RspFirmwareError    = FirmwareCmd{0x00, "rspFirmwareError", CmdLen1}
 	CmdGetNameVersion   = FirmwareCmd{0x01, "cmdGetNameVersion", CmdLen1}
 	RspGetNameVersion   = FirmwareCmd{0x02, "rspGetNameVersion", CmdLen32}
 	CmdLoadApp          = FirmwareCmd{0x03, "cmdLoadApp", CmdLen128}
