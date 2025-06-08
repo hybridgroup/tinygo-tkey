@@ -8,6 +8,7 @@ import (
 
 func handleStartedCommand(rx []byte, tx []byte) (err error) {
 	var response proto.Frame
+	var invalidCommand bool
 	hdr, err := proto.ParseFramingHdr(rx[0])
 	if err != nil {
 		return err
@@ -15,6 +16,7 @@ func handleStartedCommand(rx []byte, tx []byte) (err error) {
 
 	if hdr.Endpoint == proto.DestFW {
 		response, err = proto.FirmwareErrorFrame(int(hdr.ID))
+		invalidCommand = true
 	} else {
 		switch rx[1] {
 		case cmdGetPublicKey.Code():
@@ -39,7 +41,7 @@ func handleStartedCommand(rx []byte, tx []byte) (err error) {
 
 		default:
 			response, err = proto.AppErrorFrame(int(hdr.ID))
-
+			invalidCommand = true
 		}
 	}
 
@@ -52,6 +54,10 @@ func handleStartedCommand(rx []byte, tx []byte) (err error) {
 
 	// write tx buffer with response
 	uart.Write(tx[:response.Len()+1])
+
+	if invalidCommand {
+		return errInvalidCommand
+	}
 
 	return nil
 }

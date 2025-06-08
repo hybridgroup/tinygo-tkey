@@ -46,7 +46,7 @@ func TestHandleCommand(t *testing.T) {
 			frame.Read(rx)
 
 			err := handleCommand(rx, tx)
-			if err != nil && !tt.hasError {
+			if err != nil && !tt.hasError || (err == nil && tt.hasError) {
 				t.Errorf("handleCommand(%v) = %v, want %v", tt.cmd, err, tt.hasError)
 			}
 		})
