@@ -6,6 +6,11 @@ import (
 
 func handleSigningCommand(rx []byte, tx []byte) (err error) {
 	var response proto.Frame
+	var invalidCommand bool
+	if len(message) < messageSize {
+		return errInvalidMessage // not enough data to sign
+	}
+
 	hdr, err := proto.ParseFramingHdr(rx[0])
 	if err != nil {
 		return err
@@ -22,7 +27,7 @@ func handleSigningCommand(rx []byte, tx []byte) (err error) {
 
 	default:
 		response, err = proto.AppErrorFrame(int(hdr.ID))
-
+		invalidCommand = true
 	}
 
 	if err != nil {
@@ -34,6 +39,10 @@ func handleSigningCommand(rx []byte, tx []byte) (err error) {
 
 	// write tx buffer with response
 	uart.Write(tx[:response.Len()+1])
+
+	if invalidCommand {
+		return errInvalidCommand
+	}
 
 	return nil
 }

@@ -18,6 +18,9 @@ const (
 )
 
 var (
+	errInvalidCommand = errors.New("invalid command")
+	errInvalidMessage = errors.New("invalid message buffer")
+
 	currentState state = stateStarted
 	publicKey    ed25519.PublicKey
 	privateKey   ed25519.PrivateKey

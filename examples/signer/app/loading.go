@@ -6,6 +6,8 @@ import (
 
 func handleLoadingCommand(rx []byte, tx []byte) (err error) {
 	var response proto.Frame
+	var invalidCommand bool
+
 	hdr, err := proto.ParseFramingHdr(rx[0])
 	if err != nil {
 		return err
@@ -21,7 +23,7 @@ func handleLoadingCommand(rx []byte, tx []byte) (err error) {
 
 	default:
 		response, err = proto.AppErrorFrame(int(hdr.ID))
-
+		invalidCommand = true
 	}
 
 	if err != nil {
@@ -33,6 +35,10 @@ func handleLoadingCommand(rx []byte, tx []byte) (err error) {
 
 	// write tx buffer with response
 	uart.Write(tx[:response.Len()+1])
+
+	if invalidCommand {
+		return errInvalidCommand
+	}
 
 	return nil
 }
