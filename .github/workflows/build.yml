@@ -1,0 +1,39 @@
+name: Test and Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Go
+              uses: actions/setup-go@v5
+              with:
+                go-version: '1.24.4'
+
+            - name: Set up TinyGo
+              uses: acifani/setup-tinygo@v2
+              with:
+                tinygo-version: '0.37.0'
+
+            - name: Install dependencies
+              run: go mod download
+
+            - name: Run tests
+              run: go test -v ./...
+
+            - name: Build device apps
+              run: |
+                make build-blinker-app
+                make build-signer-app
