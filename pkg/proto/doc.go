@@ -8,21 +8,18 @@
 // It also provides types and functions for working with commands and framing headers.
 //
 // How To Use:
+//
 // - Import the package in your TinyGo application.
+//
 // - Use the framing headers to parse and construct frames for communication.
 //
 // Example of defining application commands:
 //
-// ```go
-//
 //	cmdSetLED    = proto.NewAppCmd(0x01, "cmdSetLED", proto.CmdLen32)
 //	rspSetLED    = proto.NewAppCmd(0x02, "rspSetLED", proto.CmdLen4)
 //
-// ```
-//
 // Once you have defined your commands, you can use them to create frames for sending over UART or other communication channels.
 // For example, to create a response frame for setting an LED:
-// ```go
 //
 //		response, err = proto.NewFrame(rspSetLED, 2, []byte{proto.StatusOK}
 //		if err != nil {
@@ -31,16 +28,11 @@
 //		// now send response via UART or other communication channel
 //	    ....
 //
-// ```
-//
 // You can also create an error frame like this:
-// ```go
 //
 //	response, err = proto.NewFrame(proto.NewAppCmd(0x00, "cmdUnknown", proto.CmdLen1), 2, []byte{proto.StatusBad})
 //
-// ```
 // Example of parsing a framing header:
-// ```go
 //
 //		hdr, err := proto.ParseFramingHdr(rx[0])
 //		if err != nil {
@@ -51,10 +43,7 @@
 //			handleCommand(rx, tx)
 //			...
 //
-// ```
-//
 // A typical command handler might look like this:
-// ```go
 //
 //	func handleCommand(rx []byte, tx []byte) (err error) {
 //		var response proto.Frame
@@ -65,6 +54,4 @@
 //
 //			response, err = proto.NewFrame(rspSetLED, 2, []byte{proto.StatusOK})
 //			...
-//
-// ```
 package proto
