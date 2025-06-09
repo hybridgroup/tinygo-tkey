@@ -26,6 +26,7 @@ func (l CmdLen) Bytelen() int {
 	return 0
 }
 
+// Cmd is an interface that represents a command in the Tillitis framing protocol.
 type Cmd interface {
 	Code() byte
 	String() string

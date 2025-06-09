@@ -1,14 +1,17 @@
 # tinygo-tkey
 
-[![Build](https://github.com/hybridgroup/tinygo-tkey/actions/workflows/build.yml/badge.svg)](https://github.com/hybridgroup/tinygo-tkey/actions/workflows/build.yml)
+
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/hybridgroup/tinygo-tkey/pkg/proto)](https://pkg.go.dev/github.com/hybridgroup/tinygo-tkey/pkg/proto) [![Build](https://github.com/hybridgroup/tinygo-tkey/actions/workflows/build.yml/badge.svg)](https://github.com/hybridgroup/tinygo-tkey/actions/workflows/build.yml)
 
 This package is to develop applications using [TinyGo](https://tinygo.org/) on the [Tillitis TKey-1](https://github.com/tillitis/tillitis-key1), an open source, open hardware FPGA-based USB security token.
 
-It includes an implementation of the [Tillitis framing protocol for communication](https://dev.tillitis.se/protocol/) between the device and client.
+## Protocol
+
+The `tinygo-tkey` package includes an implementation of the [Tillitis framing protocol for communication](https://dev.tillitis.se/protocol/) between the device and client.
 
 This can be used for device applications that run on the TKey hardware written using TinyGo. Of course, it pairs nicely with client applications written using "big" Go.
 
-See the [`github.com/hybridgroup/tinygo-tkey/pkg/proto`](./pkg/proto/) package for more information.
+See the [package documentation](https://pkg.go.dev/github.com/hybridgroup/tinygo-tkey/pkg/proto) for more information, as well as the code in this repo.
 
 ## Examples
 
