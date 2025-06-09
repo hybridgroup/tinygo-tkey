@@ -24,6 +24,9 @@ var (
 	errInvalidCmdLength = errors.New("cmdlen must be 0..3")
 )
 
+// FramingHdr represents the header of a frame in the framing protocol.
+// It contains the ID, endpoint, command length, and a flag indicating
+// whether the response is not OK.
 type FramingHdr struct {
 	ID            byte
 	Endpoint      Endpoint
