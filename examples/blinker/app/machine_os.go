@@ -1,5 +1,9 @@
 //go:build !tinygo
 
+// This file contains various functions stubs to be able to run the tests using "big" Go on a full OS
+// without the need for a real device.
+// This file is not used when building for tinygo, as it will use the file machine_tkey.go file instead
+// and the UART implementation there.
 package main
 
 var (
