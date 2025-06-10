@@ -1,8 +1,12 @@
-// Package proto provides the protocol definitions for the [Tillitis TKey-1](https://github.com/tillitis/tillitis-key1)
+// Package proto provides the protocol definitions for the Tillitis TKey-1
 // an open source, open hardware FPGA-based USB security token.
 //
-// This package implements the [Tillitis framing protocol for communication](https://dev.tillitis.se/protocol/)
+// https://github.com/tillitis/tillitis-key1
+//
+// This package implements the Tillitis framing protocol for communication
 // for use by device applications written using TinyGo.
+//
+// https://dev.tillitis.se/protocol/
 //
 // It defines the commands, endpoints, and framing headers used in the protocol.
 // It also provides types and functions for working with commands and framing headers.
@@ -19,6 +23,7 @@
 //	rspSetLED    = proto.NewAppCmd(0x02, "rspSetLED", proto.CmdLen4)
 //
 // Once you have defined your commands, you can use them to create frames for sending over UART or other communication channels.
+//
 // For example, to create a response frame for setting an LED:
 //
 //		response, err = proto.NewFrame(rspSetLED, 2, []byte{proto.StatusOK}
